@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+    	io=io.connect();
+    	var name=prompt("Your name:");
+    	io.emit('got_a_new_user',{name:name});
+    	io.on("redirect",function(data)
+    	{
+    		window.location.href = "http://localhost:8000/chatPanel";
+    	});
+    </script>
+
+  </head>
+  <body>
+    
+  </body>
+</html>

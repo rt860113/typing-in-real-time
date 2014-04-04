@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat Room:<%= nameUrself.name %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div class="chat" id='<%= idme %>'>
+        <p><%= nameUrself.name %></p>
+        <textarea id="input_me"></textarea>
+      </div>
+      
+    </div>
+  </body>
+  <script type="text/javascript">
+      io=io.connect();
+      // io.on("new ")
+      io.emit("chatReady");
+      $(document).ready(function(){
+        $("#input_me").keyup(function()
+        {
+          io.emit("i_input_something",{id:idme,input_me:$(this).val()});
+        })
+        io.on("otherPeople",function(data){
+            for( var i=0;i<data.otherUsers.length-1;i++)
+            {
+              $("#container").append("<div class='chat' id='"+data.ID+"''><p>"+data.name+"</p><p class='write'></p></div>")
+            }
+        });
+        io.on("New_users_coming_in",function(data){
+            $("#container").append("<div class='chat' id='"+data.id+"''><p>"+data.name+"</p><p class='write'></p></div>")
+        }); 
+      });
+      io.on("someone_input_something",function(data){
+        // $(".chat").each(function(){
+        //   if ($(this).attr("id")==data.id) 
+          // {
+            var id_me="#"+data.id;
+            var el=document.getElementById(id_me);
+            console.log(el.children);
+            // $(id_me).children(".write").html("<p class='write'>"+data.input_info+"</p>")
+          // };
+        // })
+      })
+    </script>
+</html>
